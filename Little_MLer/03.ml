@@ -11,17 +11,26 @@ type pizza =
 (* 3:7 *)
 let rec remove_anchovy = function
     Crust -> Crust
-  | (Cheese(x)) -> Cheese(remove_anchovy(x))
-  | (Onion(x)) -> Onion(remove_anchovy(x))
-  | (Anchovy(x)) -> remove_anchovy(x)
-  | (Sausage(x)) -> Sausage(remove_anchovy(x));;
+  | Cheese(x) -> Cheese(remove_anchovy(x))
+  | Onion(x) -> Onion(remove_anchovy(x))
+  | Anchovy(x) -> remove_anchovy(x)
+  | Sausage(x) -> Sausage(remove_anchovy(x));;
 (remove_anchovy : pizza -> pizza);;
 
 (* 3:38 *)
 let rec top_anchovy_with_cheese = function
     Crust -> Crust
-  | (Cheese(x)) -> Cheese(top_anchovy_with_cheese(x))
-  | (Onion(x)) -> Onion(top_anchovy_with_cheese(x))
-  | (Anchovy(x)) -> Cheese(Anchovy(top_anchovy_with_cheese(x)))
-  | (Sausage(x)) -> Sausage(top_anchovy_with_cheese(x));;
+  | Cheese(x) -> Cheese(top_anchovy_with_cheese(x))
+  | Onion(x) -> Onion(top_anchovy_with_cheese(x))
+  | Anchovy(x) -> Cheese(Anchovy(top_anchovy_with_cheese(x)))
+  | Sausage(x) -> Sausage(top_anchovy_with_cheese(x));;
 (top_anchovy_with_cheese : pizza -> pizza);;
+
+(* 3:51 *)
+let rec subst_anchovy_by_cheese = function
+    Crust -> Crust
+  | Cheese(x) -> Cheese(subst_anchovy_by_cheese(x))
+  | Onion(x) -> Onion(subst_anchovy_by_cheese(x))
+  | Anchovy(x) -> Cheese(subst_anchovy_by_cheese(x))
+  | Sausage(x) -> Sausage(subst_anchovy_by_cheese(x));;
+(subst_anchovy_by_cheese : pizza -> pizza);;
