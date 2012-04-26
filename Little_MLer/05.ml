@@ -1,4 +1,5 @@
 #print_depth 20;;
+#use "01.ml";;
 
 (* 5:1 *)
 type 'a pizza =
@@ -43,3 +44,51 @@ let rec eq_fish = function
   | Tuna, Tuna -> true
   | a_fish, another_fish -> false;;
 (eq_fish : fish * fish -> bool);;
+
+(* 5:40 if-then-else construct *)
+let rec rem_fish = function
+    (x, Bottom) -> Bottom
+  | (x, Topping(t, p)) ->
+      if eq_fish(t, x)
+      then rem_fish(x, p)
+      else Topping(t, rem_fish(x, p));;
+
+(* 5:57 *)
+let rec (eq_int : int * int -> bool) = function
+    n, m -> n = m;;
+let rec rem_int = function
+    (x, Bottom) -> Bottom
+  | (x, Topping(t, p)) ->
+      if eq_int(t, x)
+      then rem_int(x, p)
+      else Topping(t, rem_int(x, p));;
+(rem_int : int * int pizza -> int pizza);;
+
+(* 5:66 *)
+let rec subst_fish = function
+    (n, a, Bottom) -> Bottom
+  | (n, a, Topping(t, p)) ->
+      if eq_fish(t, a)
+      then Topping(n, subst_fish(n, a, p))
+      else Topping(t, subst_fish(n, a, p));;
+(subst_fish : fish * fish * fish pizza -> fish pizza);;
+let rec subst_int = function
+    (n, a, Bottom) -> Bottom
+  | (n, a, Topping(t, p)) ->
+      if eq_int(t, a)
+      then Topping(n, subst_int(n, a, p))
+      else Topping(t, subst_int(n, a, p));;
+(subst_int : int * int * int pizza -> int pizza);;
+
+(* 5:70 *)
+let rec eq_num = function
+    Zero, Zero -> true
+  | One_more_than(n), Zero -> false
+  | Zero, One_more_than(m) -> false
+  | One_more_than(n), One_more_than(m) -> eq_num(n, m);;
+
+(* 5:71 *)
+let rec eq_num = function
+    Zero, Zero -> true
+  | One_more_than(n), One_more_than(m) -> eq_num(n, m)
+  | n, m -> false;;
