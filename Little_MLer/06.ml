@@ -111,3 +111,54 @@ type 'a slist =
 and 'a sexp =
     An_atom of 'a
   | A_slist of ('a slist);;
+
+(* 6:57 *)
+let rec (occurs_in_slist : fruit * fruit slist -> int) = function
+    a, Empty -> 0
+  | a, Scons (s, y) -> occurs_in_sexp(a, s) + occurs_in_slist(a, y)
+and (occurs_in_sexp : fruit * fruit sexp -> int) = function
+    a, An_atom (b) ->
+      if eq_fruit(b, a)
+      then 1
+      else 0
+  | a, A_slist (y) -> occurs_in_slist(a, y);;
+
+(* 6:58 *)
+let rec (subst_in_slist : fruit * fruit * fruit slist -> fruit slist) = function
+    n, a, Empty -> Empty
+  | n, a, Scons (s, y) ->
+      Scons (subst_in_sexp(n, a, s), subst_in_slist(n, a, y))
+and (subst_in_sexp : fruit * fruit * fruit sexp -> fruit sexp) = function
+    n, a, An_atom (b) ->
+      if eq_fruit(b, a)
+      then An_atom (n)
+      else An_atom (b)
+  | n, a, A_slist (y) -> A_slist (subst_in_slist(n, a, y));;
+
+(* 6:65 *)
+let rec (eq_fruit_in_atom : fruit * fruit sexp -> bool) = function
+    a, An_atom (s) -> eq_fruit(a, s)
+  | a_fruit, A_slist (y) -> false;;
+
+(* 6:68 *)
+(* I don't understand this function. Seems broken to me. *)
+let rec (rem_from_slist : fruit * fruit slist -> fruit slist) = function
+    a, Empty -> Empty
+  | a, Scons (s, y) ->
+      if eq_fruit_in_atom(a, s)
+      then rem_from_slist(a, y)
+      else Scons (rem_from_sexp(a, s), rem_from_slist(a, y))
+and (rem_from_sexp : fruit * fruit sexp -> fruit sexp) = function
+    a, An_atom (b) -> An_atom (b)
+  | a, A_slist (y) -> A_slist (rem_from_slist(a, y));;
+
+(* 6:76 *)
+(* And now I see why. *)
+let rec (rem_from_slist : fruit * fruit slist -> fruit slist) = function
+    a, Empty -> Empty
+  | a, Scons (An_atom (b), y) ->
+      if eq_fruit(a, b)
+      then rem_from_slist(a, y)
+      else Scons (An_atom (b), rem_from_slist(a, y))
+  | a, Scons (A_slist (x), y) ->
+      Scons (A_slist (rem_from_slist(a, x)), rem_from_slist(a, y));;
