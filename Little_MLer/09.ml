@@ -1,4 +1,5 @@
 #print_depth 20;;
+#use "05.ml";;
 
 (* 9:4 *)
 type 'a list =
@@ -63,4 +64,9 @@ and check = function
   | n, boxes, Ix(i) -> find(i, boxes);;
 
 (* 9:98 *)
-
+let rec path = function
+    n, boxes -> try Cons(n, (check(boxes, list_item(n, boxes))))
+                with Out_of_range -> path(n / 2, boxes)
+and check = function
+    boxes, Bacon -> Empty
+  | boxes, Ix(i) -> path(i, boxes);;
