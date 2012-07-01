@@ -73,3 +73,52 @@ let in_range_c (small, large) x =
   if less_than(small, x)
   then less_than(x, large)
   else false;;
+
+(* 8:79 Using the two-stage emphasis. *)
+let rec subst_c pred = function
+    (n, Empty) -> Empty
+  | (n, Cons(e, t)) ->
+      if pred(e)
+      then Cons(n, subst_c(pred)(n, t))
+      else Cons(e, subst_c(pred)(n, t));;
+
+(* 8:86 *)
+let rec subst_c_in_range_11_16 = function
+    (n, Empty) -> Empty
+  | (n, Cons(e, t)) ->
+      if in_range_11_16(e)
+      then Cons(n, subst_c_in_range_11_16(n, t))
+      else Cons(e, subst_c_in_range_11_16(n, t));;
+
+(* 8:88 *)
+let rec combine = function
+    (Empty, l2) -> l2
+  | (Cons(a, l1), l2) -> Cons(a, combine(l1, l2));;
+
+(* 8:93 *)
+let rec combine_c = function
+    (Empty) -> (function (l2) -> l2)
+  | (Cons(a, l1)) -> (function (l2) -> Cons(a, combine_c(l1)(l2)));;
+
+(* 8:95 *)
+let rec prefixer_123 = function
+    l2 -> Cons(1, Cons(2, Cons(3, l2)));;
+
+(* 8:97 *)
+let rec waiting_prefix_123 = function
+    l2 -> Cons(1, combine_c(Cons(2, Cons(3, Empty)))(l2));;
+
+(* 8:104 *)
+let rec base = function
+    l2 -> l2;;
+
+(* 8:115 *)
+let rec combine_s = function
+    Empty -> base
+  | Cons(a, l1) -> make_cons(a, combine_s(l1))
+and make_cons = function
+    (a, f) -> (function (l2) -> Cons(a, f(l2)));;
+
+(* 8:117 *)
+let rec prefix_3 = function
+    l2 -> Cons(3, base(l2));;
