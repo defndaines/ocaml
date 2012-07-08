@@ -190,3 +190,29 @@ module IntStruct2 = NumberAsInt2
 (* 10:96 *)
 module IntArith2 = PON
   (* NOTE: Something more is needed, because this still doesn't work. *)
+
+(* 10:114 *)
+module type S =
+sig
+  type number1
+  type number2
+  val similar : (number1 * number2) -> bool
+end
+
+(* 10:115 Still not sure how to represent two structures in a functor in Ocaml. *)
+module Same
+  (X : N) : S with type number = X.number =
+  (Y : N) : S with type number = Y.number =
+struct
+  type number1 = X.number
+  type number2 = Y.number
+  let rec sim (n, m) =
+    if X.is_zero n
+    then Y.is_zero m
+    else sim(X.pred n, Y.pred m)
+  let similar (n, m) =
+    (try
+       (try sim(n, m)
+        with X.Too_small -> false)
+     with Y.Too_small -> false)
+end
