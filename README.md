@@ -13,3 +13,6 @@ until real world obligations got in the way.
 
 [fun-mooc](fun-mooc)
 Started the [Introduction to Functional Programming in OCaml](https://www.fun-mooc.fr/courses/parisdiderot/56002S02/session02/about) MOOC.
+
+[exercism](exercism)
+My solutions to [Exercism](http://exercism.io/languages/ocaml/about) exercises.
